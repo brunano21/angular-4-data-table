@@ -21,12 +21,9 @@ export class DataTablePaginationComponent {
 
   @ViewChild('pageInput') pageInput: ElementRef;
 
-  Math: any;
-
   @Input() limits: number[];
 
   constructor(@Inject(forwardRef(() => DataTableComponent)) public dataTable: DataTableComponent) {
-    this.Math = Math;
   }
 
   pageBack() {
@@ -82,5 +79,13 @@ export class DataTablePaginationComponent {
       this.page = (event.target.value > this.maxPage) ? this.maxPage : (newValue < 1 ) ? 1 : newValue;
       event.target.value = this.page;
     }
+  }
+
+  get paginationText(): string {
+    const ceil = Math.ceil(this.dataTable.itemCount / this.dataTable.limit);
+    return this.dataTable.labels.paginationText
+    .replace('{from}', ceil !== 0 ? String(this.dataTable.offset + 1) : '0')
+    .replace('{to}', String(Math.min(this.dataTable.offset + this.dataTable.limit, this.dataTable.itemCount)))
+    .replace('{total}', String(this.dataTable.itemCount));
   }
 }

@@ -1,9 +1,6 @@
 <div class="d-flex justify-content-between align-items-center">
   <div class="pagination-range">
-    <span [textContent]="dataTable.labels.paginationText
-        .replace('{from}', this.Math.ceil(dataTable.itemCount / dataTable.limit) !== 0 ? dataTable.offset + 1 + '' : '0')
-        .replace('{to}', this.Math.min(dataTable.offset + dataTable.limit, dataTable.itemCount) + '')
-        .replace('{total}', dataTable.itemCount + '')"></span>
+    <span [textContent]="paginationText"></span>
   </div>
   <div class="pagination-controllers pagination-box d-flex justify-content-between">
     <div class="pagination-limit d-flex justify-content-between">
