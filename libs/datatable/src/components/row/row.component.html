@@ -6,7 +6,7 @@
     [class.selected]="selected"
     [class.clickable]="dataTable.selectOnRowClick">
   <td [hide]="!dataTable.expandColumnVisible">
-    <button (click)="expanded = !expanded; $event.stopPropagation()" class="row-expand-button"
+    <button (click)="expandButtonClicked()" class="row-expand-button"
          [attr.aria-expanded]="expanded"
          [title]="dataTable.labels.expandRow.replace('{cell_content}', ''+item[dataTable.primaryColumn])"
          [attr.aria-label]="dataTable.labels.expandRow.replace('{cell_content}', ''+item[dataTable.primaryColumn])">
