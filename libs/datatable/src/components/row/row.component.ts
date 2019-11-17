@@ -32,6 +32,7 @@ export class DataTableRowComponent implements OnInit, OnDestroy {
   private _selected: boolean;
 
   @Output() selectedChange = new EventEmitter();
+  @Output() rowExpandEvent = new EventEmitter();
 
   get selected() {
     return this._selected;
@@ -40,6 +41,11 @@ export class DataTableRowComponent implements OnInit, OnDestroy {
   set selected(selected) {
     this._selected = selected;
     this.selectedChange.emit(selected);
+  }
+
+  expandButtonClicked(){
+    this.expanded = !this.expanded;
+    this.rowExpandEvent.emit(this.expanded);
   }
 
   // other:

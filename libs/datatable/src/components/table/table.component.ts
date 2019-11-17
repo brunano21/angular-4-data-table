@@ -94,6 +94,8 @@ export class DataTableComponent implements DataTableParams, OnInit, AfterContent
   @Output() rowDoubleClick = new EventEmitter();
   @Output() headerClick = new EventEmitter();
   @Output() cellClick = new EventEmitter();
+  @Output() rowExpandButtonClick = new EventEmitter();
+  
   // UI state without input:
   indexColumnVisible: boolean;
   selectColumnVisible: boolean;
@@ -219,7 +221,7 @@ export class DataTableComponent implements DataTableParams, OnInit, AfterContent
       this.limit = this.pageLimits[0];
     }
 
-    this.labels = {...defaultTranslations, ...this.labels};
+    this.labels = { ...defaultTranslations, ...this.labels };
 
     if (this.autoReload) {
       this.reloadItems();
@@ -273,25 +275,25 @@ export class DataTableComponent implements DataTableParams, OnInit, AfterContent
   constructor() { }
 
   public rowClicked(row: DataTableRowComponent, event: Event) {
-    this.rowClick.emit({row, event});
+    this.rowClick.emit({ row, event });
   }
 
   public rowDoubleClicked(row: DataTableRowComponent, event: Event) {
-    this.rowDoubleClick.emit({row, event});
+    this.rowDoubleClick.emit({ row, event });
   }
 
   public headerClicked(column: DataTableColumnDirective, event: Event) {
     if (!this._resizeInProgress) {
       event.preventDefault();
       event.stopPropagation();
-      this.headerClick.emit({column, event});
+      this.headerClick.emit({ column, event });
     } else {
       this._resizeInProgress = false; // this is because I can't prevent click from mousup of the drag end
     }
   }
 
   private cellClicked(column: DataTableColumnDirective, row: DataTableRowComponent, event: MouseEvent) {
-    this.cellClick.emit({row, column, event});
+    this.cellClick.emit({ row, column, event });
   }
 
   // functions:
@@ -364,6 +366,7 @@ export class DataTableComponent implements DataTableParams, OnInit, AfterContent
       }
     }
 
+
     // unselect all other rows:
     if (row.selected && !this.multiSelect) {
       this.rows.toArray().filter(row_ => row_.selected).forEach(row_ => {
@@ -374,10 +377,16 @@ export class DataTableComponent implements DataTableParams, OnInit, AfterContent
     }
   }
 
+
+  onRowExpandButtonClicked(row: DataTableRowComponent, statusOfRow: Boolean) {
+    this.rowExpandButtonClick.emit({ row: row, status: statusOfRow });
+  }
+
+
   // other:
 
   get substituteItems() {
-    return Array.from({length: this.displayParams.limit - this.items.length});
+    return Array.from({ length: this.displayParams.limit - this.items.length });
   }
 
   private resizeColumnStart(event: MouseEvent, column: DataTableColumnDirective, columnElement: HTMLElement) {
@@ -399,7 +408,7 @@ export class DataTableComponent implements DataTableParams, OnInit, AfterContent
          that offsetWidth sometimes contains out-of-date values. */
     if ((dx < 0 && (columnElement.offsetWidth + dx) <= this.resizeLimit) ||
       !columnElement.nextElementSibling || // resizing doesn't make sense for the last visible column
-      (dx >= 0 && ((<HTMLElement> columnElement.nextElementSibling).offsetWidth + dx) <= this.resizeLimit)) {
+      (dx >= 0 && ((<HTMLElement>columnElement.nextElementSibling).offsetWidth + dx) <= this.resizeLimit)) {
       return false;
     }
     return true;
